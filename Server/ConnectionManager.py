@@ -1,7 +1,7 @@
 
 from threading import Thread
 import DataReceiver
-import DataSwitch
+import DataExtractor
 import socket
 
 HOST = '192.168.0.3'
@@ -18,7 +18,8 @@ class ConnectionManager:
     socket = createAndBindSocket(HOST, PORT)
 
     def registerReceiver(self, dataReceiver: DataReceiver):
-        _dataReceiver = dataReceiver
+        print("OK ZAREJESTROWALEM")
+        self._dataReceiver = dataReceiver
 
     def newConnectionHandler(self, newTcpConnection):
         connection = (newTcpConnection, self._nextConnectionId)
@@ -47,7 +48,8 @@ class ConnectionManager:
 
     def __init__(self):
         self._nextConnectionId = 0
-        self._dataReceiver = DataSwitch.DataSwitch
         self.connections = []
         connectionListener = Thread(target=self.newConnectionListener, args=(self,))
         connectionListener.start()
+
+connManager = ConnectionManager()

@@ -1,5 +1,7 @@
 from MessageID import MessageID
 
+
+
 class RegisterMessage:
     messageId = MessageID.REGISTER
     def __init__(self, config):
@@ -16,3 +18,10 @@ class SendToMessage:
         self.fromId = config[0]
         self.toId = config[1]
         self.content = config[2]
+
+
+messageIdSwitch = {
+    MessageID.REGISTER : RegisterMessage,
+    MessageID.LIST_USER : ListUserMessage,
+    MessageID.SEND_TO : SendToMessage
+}
