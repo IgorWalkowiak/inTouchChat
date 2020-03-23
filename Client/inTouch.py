@@ -5,12 +5,12 @@ PORT = 2553        # The port used by the server
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
 
-    name = input("Type your nickname: ")
+    #name = input("Type your nickname: ")
     socket.connect((HOST, PORT))
     while True:
         text = input(":")
         socket.send((text).encode())
-        #data = socket.recv(1024)
+        data = socket.recv(1024)
+        print('Received', repr(data))
 
-print('Received', repr(data))
 

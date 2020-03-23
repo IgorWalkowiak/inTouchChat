@@ -17,38 +17,41 @@ class ConnectionManager:
     _dataReceiver : DataReceiver
     socket = createAndBindSocket(HOST, PORT)
 
+    def sendTo(self, portTarget, data):
+        conn, addr = self.connections[portTarget]
+        print("Sending :",data,"to ",addr)
+        conn.send(data.encode())
+
     def registerReceiver(self, dataReceiver: DataReceiver):
-        print("OK ZAREJESTROWALEM")
         self._dataReceiver = dataReceiver
 
     def newConnectionHandler(self, newTcpConnection):
-        connection = (newTcpConnection, self._nextConnectionId)
-        self.connections.append(connection)
-        connectionListener = Thread(target=self.rxPacketListener, args=((self,connection),))
+        self.connections[self._nextConnectionId] = newTcpConnection
+        connectionListener = Thread(target=self.rxPacketListener, args=(newTcpConnection, self._nextConnectionId))
         connectionListener.start()
         a ,connectionInfo = newTcpConnection
-        print("new connection from address:",connectionInfo[0])
+        print("new connection from address:",connectionInfo[0], " with connection ID:",self._nextConnectionId)
+        self._nextConnectionId = self._nextConnectionId+1
 
-    def newConnectionListener(self,why):
+    def newConnectionListener(self, why):
         while True:
             newConnection = self.socket.accept()
             self.newConnectionHandler(newConnection)
 
-    def rxPacketListener(self, handledConnection):
-        connection, connectionID = handledConnection[1]
-        conn, addr = connection
+    def rxPacketListener(self, tcpConnection, connId):
+        conn, addr = tcpConnection
+        print(connId)
         while True:
             data = conn.recv(1024)
             if data:
-                self._dataReceiver.handleData(data.decode("utf-8"))
+                self._dataReceiver.handleData(connId, data.decode("utf-8"))
             else:
                 print("Lost connection with", addr)
                 break
 
-
     def __init__(self):
         self._nextConnectionId = 0
-        self.connections = []
+        self.connections = {}
         connectionListener = Thread(target=self.newConnectionListener, args=(self,))
         connectionListener.start()
 
