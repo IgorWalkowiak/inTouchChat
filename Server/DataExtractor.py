@@ -1,7 +1,6 @@
 from DataReceiver import DataReceiver
 from MessageID import MessageID
 from MessageExecutor import MessageExecutor
-import ConnectionManager
 import Messages
 
 class DataExtractor(DataReceiver):
@@ -17,5 +16,3 @@ class DataExtractor(DataReceiver):
         MessageExecutor.execute(message)
 
 
-dataExtractor = DataExtractor()
-ConnectionManager.connManager.registerReceiver(dataExtractor)
