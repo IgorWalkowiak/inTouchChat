@@ -27,14 +27,14 @@ class ListUserMessage(Message):
         print("NEW",self.messageId)
         self.fromId = config[0]
     def execute(self) -> None:
-        users = UserDatabase.userDatabase.idToNickName.values()
+        users = list = [(k, v) for k, v in UserDatabase.userDatabase.idToNickName.items()]
         response = self.prepareResponse(users)
         Sender.send(self.fromPort,response)
     def prepareResponse(self, users):
         reponse = "2"
-        for user in users:
+        for userId, user in users:
             print(user)
-            reponse = reponse+"::"+user
+            reponse = reponse+"::"+user+"::"+str(userId)
         return reponse
 
 
@@ -50,11 +50,10 @@ class SendToMessage(Message):
         print(self.toId)
         print(UserDatabase.userDatabase.idToPort)
         recipientPort = UserDatabase.userDatabase.idToPort[int(self.toId)]
-        print("do kogo? ",recipientPort)
         response = self.prepareResponse()
         Sender.send(recipientPort, response)
     def prepareResponse(self):
-        response="1::"+self.content
+        response= "3::{}::{}".format(self.fromId, self.content)
         return response
 
 messageIdSwitch = {
