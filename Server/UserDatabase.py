@@ -9,11 +9,10 @@ class UserDatebase:
         if nickName in self.idToNickName.values():
             raise NameError('Nickname already in base!')
         elif port in self.idToPort.values():
-            raise NameError('Two users connected from one port!')
+            raise NameError('Two users connected from one logical port!')
         else:
             self.lastIdCounter = self.lastIdCounter+1
             self.idToPort[self.lastIdCounter] = port
-            print("REJESTRACJA:", self.idToPort)
             self.idToNickName[self.lastIdCounter] = nickName
             return self.lastIdCounter
 

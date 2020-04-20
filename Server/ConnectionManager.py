@@ -19,7 +19,6 @@ class ConnectionManager:
 
     def sendTo(self, portTarget, data):
         conn, addr = self.connections[portTarget]
-        print("Sending :",data,"to ",addr)
         conn.send(data.encode())
 
     def registerReceiver(self, dataReceiver: DataReceiver):
@@ -30,7 +29,6 @@ class ConnectionManager:
         connectionListener = Thread(target=self.rxPacketListener, args=(newTcpConnection, self._nextConnectionId))
         connectionListener.start()
         a ,connectionInfo = newTcpConnection
-        print("new connection from address:",connectionInfo[0], " with connection ID:",self._nextConnectionId)
         self._nextConnectionId = self._nextConnectionId+1
 
     def newConnectionListener(self, why):
