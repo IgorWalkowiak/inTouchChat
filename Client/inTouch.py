@@ -1,16 +1,54 @@
-import socket
+import ChatGUI as gui
+import Requests
+import ConnectionManager
+import threading
+import time
+import copy
 
-HOST = '192.168.0.3'  # The server's hostname or IP address
-PORT = 2553        # The port used by the server
+usersToId = {}
+nickname = input("nick")
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
-
-    #name = input("Type your nickname: ")
-    socket.connect((HOST, PORT))
+def userRefresher():
     while True:
-        text = input(":")
-        socket.send((text).encode())
-        data = socket.recv(1024)
-        print('Received', repr(data))
+        print("refreshing!")
+        Requests.listUsers()
+        time.sleep(2.5)
+
+def messageSentTo(toNickName, text):
+    global usersToId
+    myId = usersToId[nickname]
+    toId = usersToId[toNickName]
+    Requests.sendTo(myId, toId, text)
 
 
+
+Requests.register(nickname)
+chatGui = gui.ChatGUI(600,600,nickname, messageSentTo)
+
+def availableUserHandler(message):
+    global usersToId
+    global nickname
+    print("availableUserHandler")
+    usersToId = copy.deepcopy(message)
+    usersList = list(usersToId.keys())
+    usersList.remove(nickname)
+    if usersList:
+        chatGui.updateAvailableUsers(usersList)
+
+def newMessageFrom(fromId, text):
+    global usersToId
+    for user, userId in usersToId.items():
+        if userId == fromId:
+            chatGui.newMessageFrom(text, user)
+
+
+
+Requests.availableUserResponseHandler = availableUserHandler
+Requests.newMessageFrom = newMessageFrom
+
+refresher = threading.Thread(target=userRefresher)
+refresher.start()
+gui.mainWindow.mainloop()
+
+
+print("listuje")

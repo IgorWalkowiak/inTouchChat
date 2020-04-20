@@ -1,7 +1,7 @@
 import socket
 import threading
 
-HOST = '192.168.0.3'  # The server's hostname or IP address
+HOST = 'XXX'  # The server's hostname or IP address
 PORT = 2553        # The port used by the server
 
 
