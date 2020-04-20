@@ -6,11 +6,10 @@ import time
 import copy
 
 usersToId = {}
-nickname = input("nick")
+nickname = input("Please type your nickname: ")
 
 def userRefresher():
     while True:
-        print("refreshing!")
         Requests.listUsers()
         time.sleep(2.5)
 
@@ -28,7 +27,6 @@ chatGui = gui.ChatGUI(600,600,nickname, messageSentTo)
 def availableUserHandler(message):
     global usersToId
     global nickname
-    print("availableUserHandler")
     usersToId = copy.deepcopy(message)
     usersList = list(usersToId.keys())
     usersList.remove(nickname)
@@ -49,6 +47,3 @@ Requests.newMessageFrom = newMessageFrom
 refresher = threading.Thread(target=userRefresher)
 refresher.start()
 gui.mainWindow.mainloop()
-
-
-print("listuje")
