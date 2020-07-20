@@ -9,3 +9,9 @@ HOST = 'XXX.XXX.XXX.XXX'
 It is my first "bigger" project in Python. Guess in some time I will look at it with "what happened here" :C
 
 Feel free to use it of course! 
+
+Dog perspective:
+![DogPerspective](https://github.com/IgorWalkowiak/inTouchChat/blob/master/HowItLooksLike1.png)
+
+Duck perspective:
+![DuckPerspective](https://github.com/IgorWalkowiak/inTouchChat/blob/master/HowItLooksLike2.png)
